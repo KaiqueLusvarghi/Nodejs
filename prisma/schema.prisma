@@ -17,5 +17,35 @@ model Produto {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
+  //Associação com categoria - Produto é de uma única cateogria ( N -> 1)
+
+  CategoriaId  Int
+  Categoria    Categoria   @relation(fields: [CategoriaId], references: [id])
+  Fornecedor   Fornecedor? @relation(fields: [fornecedorId], references: [id])
+  fornecedorId Int?
+
   @@map("produtos")
+}
+
+model Fornecedor {
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(100)
+  cnpj      Decimal   @unique
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  //Fornecedor fornece vários produtos (N->N)
+  produtos Produto[]
+
+  @@map("fornecedores")
+}
+
+model Categoria {
+  id   Int    @id @default(autoincrement())
+  nome String @db.VarChar(50)
+
+  //Associação com Produtos - Cateogria é associada a vários Produtos
+  produtos Produto[]
+
+  @@map("categorias")
 }

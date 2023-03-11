@@ -1,22 +1,25 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+
 class ProdutoController {
     async index(req: Request, res: Response) {
         const prisma = new PrismaClient();
-        const produtos = await prisma.produto.findMany();
-        // recupera todos os produto        
+        const produtos = await prisma.produto.findMany();//Recuperar produtos  
+        
         res.status(200).json(produtos);
+
     } async show(req: Request, res: Response) {
         const prisma = new PrismaClient();
-        const produto = await prisma.produto.findUnique(
-            // busca produto conforme where            
+        const produto = await prisma.produto.findUnique(// busca produto conforme where            
+
             {
                 where: { id: Number(req.params.id) },
-                select: { id: true, nome: true, preco: true }
-                // quais dados se quer no resultado 
+                select: { id: true, nome: true, preco: true }// quais dados se quer no resultado 
             });
         res.status(200).json(produto);
-    } async store(req: Request, res: Response) {
+    }
+
+    async store(req: Request, res: Response) {
         const prisma = new PrismaClient();
         //obtém json vindo do cliente        
         const dados = req.body;
@@ -29,7 +32,8 @@ class ProdutoController {
                     nome: true,
                     preco: true
                 }
-            });
+            }
+        );
         res.status(200).json(novoPoduto);
     }
     async update(req: Request, res: Response) {
@@ -49,11 +53,12 @@ class ProdutoController {
     }
     async delete(req: Request, res: Response) {
         const prisma = new PrismaClient();
-        await prisma.produto.delete({
-            where: {
-                id: Number(req.params.id)
+        await prisma.produto.delete(
+            {
+                where: {
+                    id: Number(req.params.id)
+                }
             }
-        }
         );
         res.status(200).json({ excluido: true });
     }

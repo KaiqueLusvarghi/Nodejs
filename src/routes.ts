@@ -4,6 +4,7 @@ import { Router } from "express";
 import TesteController from "./controllers/TesteController";
 // Validação dos parâmetros da rota
 import ValidaTeste1 from "./controllers/middlewares/ValidaTeste1";
+import ProdutoController from "./controllers/ProdutoController";
 // Instancia roteador
 const Roteador = Router();
 // Define rota tipo get que, para funcionar, deve ser requisitada conforme exemplo.
@@ -17,4 +18,11 @@ Roteador.get(
    // Aciona função do TesteController   
     new TesteController().teste1
 );
+
+Roteador.get('/produtos', new ProdutoController().index);
+Roteador.get('/produtos/:id', new ProdutoController().show);
+Roteador.post('/produtos', new ProdutoController().store);
+Roteador.put('/produtos/:id', new ProdutoController().update);
+Roteador.delete('/produtos/:id', new ProdutoController().delete);
+
 export default Roteador;
