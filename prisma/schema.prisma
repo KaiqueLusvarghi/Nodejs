@@ -17,10 +17,11 @@ model Produto {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  //Associação com categoria - Produto é de uma única cateogria ( N -> 1)
 
+  //Associação com categoria - Produto é de uma única cateogria ( N -> 1)
   CategoriaId  Int
   Categoria    Categoria   @relation(fields: [CategoriaId], references: [id])
+  // Produtos te mvários fornecedores (N -N)
   Fornecedor   Fornecedor? @relation(fields: [fornecedorId], references: [id])
   fornecedorId Int?
 

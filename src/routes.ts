@@ -24,5 +24,6 @@ Roteador.get('/produtos/:id', new ProdutoController().show);
 Roteador.post('/produtos', new ProdutoController().store);
 Roteador.put('/produtos/:id', new ProdutoController().update);
 Roteador.delete('/produtos/:id', new ProdutoController().delete);
+Roteador.put('/produtos/fornecedores/:id', new ProdutoController().associarFornecedores);
 
 export default Roteador;
