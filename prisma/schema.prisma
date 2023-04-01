@@ -17,13 +17,12 @@ model Produto {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-
   //Associação com categoria - Produto é de uma única cateogria ( N -> 1)
   CategoriaId  Int
   Categoria    Categoria   @relation(fields: [CategoriaId], references: [id])
-  // Produtos te mvários fornecedores (N -N)
-  Fornecedor   Fornecedor? @relation(fields: [fornecedorId], references: [id])
-  fornecedorId Int?
+
+  fornecedores Fornecedor[]
+  intensNota ItemNotaFiscal[]
 
   @@map("produtos")
 }
@@ -41,12 +40,68 @@ model Fornecedor {
   @@map("fornecedores")
 }
 
+
 model Categoria {
   id   Int    @id @default(autoincrement())
-  nome String @db.VarChar(50)
+  nome String @db.VarChar(100)
 
   //Associação com Produtos - Cateogria é associada a vários Produtos
   produtos Produto[]
 
   @@map("categorias")
 }
+
+model Usuario {
+  id    Int    @id @default(autoincrement())
+  email String @unique @db.VarChar(100)
+  senha String @db.VarChar(50)
+
+  @@map("Usuarios")
+}
+
+model NotaFiscal {
+  id              Int              @id @default(autoincrement())
+  cpfCliente      String           @db.VarChar(20)
+  dataVenda       DateTime
+ // teste           Int
+  enderecoEntrega String           @db.VarChar(100)
+  itemNotaFiscal ItemNotaFiscal[]
+
+  @@map("notasfiscais")
+}
+
+model ItemNotaFiscal {
+  id Int @id @default(autoincrement())
+
+  notaFiscalId Int
+  notaFiscal NotaFiscal @relation(fields: [notaFiscalId], references: [id])
+
+  produtoId    Int
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  quantidade Int
+  valorUnitario Decimal @db.Decimal(12,2)
+
+  @@map("itensnotafiscal")
+}
+
+//Exemplo de Relações 
+
+
+//model A {
+//  id Int @id
+//  b B []
+//} 
+
+//model B{
+//  id Int @id
+//  aId Int
+// a A @relation(fields: [aId], references: [id])
+//  c C[]
+// }
+
+// model C {
+//  id Int @id
+// b B[]
+//}
+ 

@@ -18,16 +18,18 @@ class ProdutoController {
     }
     async show(req: Request, res: Response) {
         const prisma = new PrismaClient();
-        const produto = await prisma.produto.findUnique(// busca produto conforme where            
-
+        const produto = await prisma.produto.findUnique( // busca produto conforme where
             {
                 where: { id: Number(req.params.id) },
                 select: {
-                    id: true, // seleciona as propriedades desejadas de Produto
+                    id: true,  // seleciona as propriedade desejadas de Produto
                     nome: true,
                     preco: true,
                     categoria: {
-                        select: { nome: true }
+                        select: { nome: true }  // traz do model relacionado Categoria apenas o nome
+                    },
+                    fornecedores: {
+                        select: {nome:true}
                     }
                 }
             }
@@ -37,20 +39,20 @@ class ProdutoController {
 
     async store(req: Request, res: Response) {
         const prisma = new PrismaClient();
-        //obtém json vindo do cliente. Exemplo Formato: {nome: "Prego", preco:2.3, categoriaId:1}        
+        //obtém json vindo do cliente. Exemplo Formato: {nome: "Prego", preco:2.3, categoriaId:1}
         const { nome, preco, categoriaId } = req.body;
         const novoPoduto = await prisma.produto.create(
             {
                 data: {
                     nome: nome,
                     preco: preco,
-                    categoria: { connect: { id: categoriaId } } // associa produto à categoria               
+                    categoria: { connect: { id: categoriaId } } // associa produto à categoria
                 },
                 select: {
                     id: true,
                     nome: true,
                     preco: true,
-                    categoria: true  // traz todos os dados de catedoria               
+                    categoria: true  // traz todos os dados de catedoria
                 }
             }
         );
@@ -66,10 +68,13 @@ class ProdutoController {
                 data: {
                     nome: nome,
                     preco: preco,
-                    categoria: { connect: { id: categoriaId } } // associa produto à categoria                
-                }, select: {
-                    id: true, nome: true,
-                    preco: true, categoria: true
+                    Categoria: {connect:{id:categoriaId}} // associa produto à categoria
+                },
+                select: {
+                    id: true,
+                    nome: true,
+                    preco: true,
+                    Categoria: true
                 }
             }
         );
@@ -96,13 +101,13 @@ class ProdutoController {
             {
                 where: { id: Number(req.params.id) },
                 data: {
-                    fornecedores: { connect: dados } // associa produto à categoria               
+                    Fornecedor:{connect:dados} // associa produto à categoria               
                 },
                 select: {
                     nome: true,
                     preco: true,
-                    categoria: true,
-                    fornecedores: true
+                    Categoria: true,
+                    fornecedor : true,
                 }
             }
         );
